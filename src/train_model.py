@@ -5,8 +5,8 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
 import pickle
 
-true_news = pd.read_csv("True.csv")
-fake_news = pd.read_csv("Fake.csv")
+true_news = pd.read_csv("data/True.csv")
+fake_news = pd.read_csv("data/Fake.csv")
 
 true_news["label"] = 1
 fake_news["label"] = 0
@@ -31,5 +31,6 @@ print(f"Model accuracy: {accuracy*100:.2f}%")
 
 pickle.dump(model, open("model/fake_news_model.pkl", "wb"))
 pickle.dump(vectorizer, open("model/vectorizer.pkl", "wb"))
+
 
 print("Model and vectorizer saved successfully!")
