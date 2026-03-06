@@ -1,17 +1,21 @@
-from fastapi import FastAPI
-from pydantic import BaseModel
+import streamlit as st
 import pickle
-
-app = FastAPI()
 
 model = pickle.load(open("model/fake_news_model.pkl", "rb"))
 vectorizer = pickle.load(open("model/vectorizer.pkl", "rb"))
 
-class NewsInput(BaseModel):
-    text: str
+st.title("📰 Fake News Detection")
+st.subheader("Enter a news headline or paragraph")
 
-@app.post("/predict")
-def predict_news(data: NewsInput):
-    transformed_text = vectorizer.transform([data.text])
-    prediction = model.predict(transformed_text)[0]
-    return {"prediction": "Fake News" if prediction == 0 else "Real News"}
+user_input = st.text_area("Type the news text here...")
+
+if st.button("Predict"):
+    if user_input:
+        transformed = vectorizer.transform([user_input])
+        prediction = model.predict(transformed)[0]
+        if prediction == 0:
+            st.error("🚨 Fake News Detected!")
+        else:
+            st.success("✔ Real News")
+    else:
+        st.warning("Please enter some text before predicting.")
